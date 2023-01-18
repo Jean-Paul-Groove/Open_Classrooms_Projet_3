@@ -21,15 +21,17 @@ let listOfWorks = []
     }  
 
 
-console.log(workListJSON)
 function createTotalListOfWorks() {
-    let finalList
-    fetchWorkList
+    
+    fetchWorkList()
     .then(listJSON => {
+        let finalList = [];
         for (let workJSON of listJSON) {
         let work = new Work (workJSON)
         finalList.push(work)
-}
+        console.log(finalList)}
+
+console.log(finalList)
 return finalList})}
 listOfWorks = createTotalListOfWorks ()
 console.log(listOfWorks)

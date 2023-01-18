@@ -8,65 +8,42 @@ class Work {
         this.category = workJSON.category
     }
 }
-
-const gallery = document.querySelector(".gallery")
-let listOfWorks = []
-/* On récupère les travaux et on les met au format JSON pour les exploiter */ 
- 
-  async function fetchWorkList(){
-    let data = await fetch ("http://localhost:5678/api/works");
-    let worklist = await data.json()
-    console.log(worklist)
-    return worklist
-    }  
-
-
-function createTotalListOfWorks() {
-    
-    fetchWorkList()
-    .then(listJSON => {
-        let finalList = [];
-        for (let workJSON of listJSON) {
-        let work = new Work (workJSON)
-        finalList.push(work)
-        console.log(finalList)}
-
-console.log(finalList)
-return finalList})}
-listOfWorks = createTotalListOfWorks ()
-console.log(listOfWorks)
-console.log(listOfWorks.length)
-
-/* Fonction pour afficher les travaux en fonction de la liste passée en argument */
-function displayWorks (list){
-    
-    list.forEach( project => {
-        console.log(project.imageUrl)
+//Fonction pour afficher la liste de travaux
+function displayWorks (list){    
+    list.forEach( work => {
         let figure = document.createElement("figure")
-        figure.innerHTML = `<img src="${project.imageUrl}" alt="${project.title}">`
+        figure.innerHTML = `<img crossorigin="anonymous" src="${work.imageUrl}" alt="${work.title}">`
         let figcaption = document.createElement("figcaption")
-        figcaption.innerHTML = project.title   
+        figcaption.innerHTML = work.title   
         figure.appendChild(figcaption)
         gallery.appendChild(figure)}
         )
 }
-// On l'appelle une première fois pour l'affichage initial
-displayWorks(listOfWorks)
-
-        
+// fonction pour actualiser la liste de travaux
+function fetchListOfWorks(){
+    totalList=[];
+    fetch ("http://localhost:5678/api/works")
+    .then( data=>data.json())
+    .then(listJSON => {
+          for (let workJSON of listJSON) {
+              let work = new Work (workJSON)
+              totalList.push(work)
+              }
+          displayWorks(totalList)     
+    })
+}
 
  
-    /*
-    const figure = document.createElement("figure")
-    const figcaption = document.createElement("figcaption")
-    const img = document.createElement("img")
-    console.log(figure)
-    img.src = element.imageUrl
-    img.alt = element.title
-    figcaption.appendChild(work.title)
-    figure.appendChild(img)
-    figure.appendChild(figcaption)
-    gallery.appendChild(figure)
-  */
+//On récupère le conteneur ".gallery"
+const gallery = document.querySelector(".gallery")
+let totalList = []
+        
+//On fait le premier affichage
+fetchListOfWorks()
+
+    
+   
+ 
+   
    
     

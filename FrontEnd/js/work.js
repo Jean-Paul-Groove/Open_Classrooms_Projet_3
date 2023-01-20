@@ -74,20 +74,59 @@ function fetchListOfWorks(){
           
     })
 }
+//fonction pour l'affichage édition
+function startEditMode (){
+    
+   loginLink.innerHTML="logout"
+   loginLink.addEventListener("click",(event) =>{
+            event.preventDefault()
+            sessionStorage.clear()
+            loginLink.innerHTML="login"
+            editBanner.remove()
+            document.body.style.paddingTop = "0";   
+        },{once: true}
+        )
+    let editBanner = document.createElement("div")
+    editBanner.classList.add("edit-banner")
+    editBanner.innerHTML='<p class="editButton"><i class="fa-regular fa-pen-to-square"></i>  Mode édition</p><button class="button-edit">publier les changements</button>'
+    document.body.prepend(editBanner)
+    document.body.style.paddingTop = "2em";
+    let modal= document.querySelector(".editButton")
+        modal.addEventListener("click", ()=>{
+            openEditModal()
+        })
+}
+//Fonction qui ouvre la modale d'édition
+function openEditModal(){
+    let modal = document.createElement("div")
+    modal.innerHTML=`<span class="modal_close_button" >&times;</span>
+        <h3>Galerie photo</h3>
+        <div class="modale-galery"></div>`
+    modal.classList.add("edit-modal")
+    document.body.appendChild(modal)
+    let overlay = document.createElement("div")
+    overlay.classList.add("overlay")
+    document.body.appendChild(overlay)
 
-
+}
  
-//On récupère le conteneur ".gallery"
+//On récupère le conteneur ".gallery", portfolio et le lien login de la nav
 const gallery = document.querySelector(".gallery")
 const portfolio = document.getElementById("portfolio")
+const loginLink = document.querySelector(".login-link")
 let totalList = []
 //Map des catégories existantes de filtres
 const categoriesList = new Map();
 //On fait le premier affichage
 fetchListOfWorks()
+let token = sessionStorage.getItem("token")
 console.log(totalList)
+//Si connexion réussie alors un token est dans le SessionStorage
+if (token) {
+    startEditMode()
+}
 
-//filtres : 
+
 
 
     

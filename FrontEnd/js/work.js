@@ -42,7 +42,13 @@ function displayWorks(list) {
 //MISE EN PLACE DES FILTRES
 //Fonction pour afficher les boutons filtres correspondant aux catégories
 function createFilters(categoriesList) {
-  let filtersContainer = document.createElement("div");
+    let filtersContainer
+    if(!document.querySelector(".filtersContainer")){
+        filtersContainer = document.createElement("div");
+    }else{
+        filtersContainer = document.querySelector(".filtersContainer");
+        filtersContainer.innerHTML=""
+    }
   filtersContainer.classList.add("filtersContainer");
   portfolio.insertBefore(filtersContainer, gallery);
   let buttonAll = document.createElement("button");
@@ -61,7 +67,9 @@ function createFilters(categoriesList) {
       filterWorks(category[0]);
     });
   }
-}
+
+    }
+  
 //Fonction qui crée une liste de projets selon la catégorie choisie et affiche ensuite cette sélection
 function filterWorks(categoryId) {
   button = document.querySelector(`.button-${categoryId}`);
@@ -104,15 +112,29 @@ function startEditMode() {
     '<p class="editButton"><i class="fa-regular fa-pen-to-square"></i>  Mode édition</p><button class="button-edit">publier les changements</button>';
   document.body.prepend(editBanner);
   document.body.style.paddingTop = "2em";
-  let modal = document.querySelector(".editButton");
-  modal.addEventListener("click", () => {
+  let openModal = document.querySelector(".editButton");
+  openModal.addEventListener("click", () => {
     openEditModal();
-  });
+  })
+  let editProfilePicture = document.createElement("p")
+  editProfilePicture.classList.add("edit-element-paragraph")
+  editProfilePicture.innerHTML='<i class="fa-regular fa-pen-to-square"></i> Modifier'
+  document.querySelector("#introduction figure").appendChild(editProfilePicture)
+  let marginLeftOfProfilePicture = window.getComputedStyle(document.querySelector("#introduction figure img")).getPropertyValue('margin-left')
+  console.log(marginLeftOfProfilePicture)
+  editProfilePicture.style.marginLeft=marginLeftOfProfilePicture
+  editProfilePicture.style.marginTop="5px"
 }
 //Fonction qui ouvre la modale d'édition lorsque le bouton Mode édition est cliqué
 function openEditModal() {
   //Création de la div pour la modale
-  let modal = document.createElement("div");
+  let modal
+  if (!document.querySelector(".edit-modal")){
+    modal = document.createElement("div");
+  }else{
+    modal = document.querySelector(".edit-modal")
+  }
+  
   modal.innerHTML = `<p class="modal-nav"><span class="modal_close_button" >&times;</span></p>
         <h3>Galerie photo</h3>
         <div class="modal-gallery"></div>
@@ -121,9 +143,11 @@ function openEditModal() {
   modal.classList.add("edit-modal");
   document.body.appendChild(modal);
   //création div pour l'overlay
-  let overlay = document.createElement("div");
-  overlay.classList.add("overlay");
-  document.body.appendChild(overlay);
+  if(!document.querySelector(".overlay")){
+    let overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+    document.body.appendChild(overlay);
+  }
   //Ajout event pour fermeture de la modale
   let closeModalButton = document.querySelector(".modal_close_button");
   closeModalButton.addEventListener("click", () => {
@@ -166,7 +190,6 @@ function addPictureModal() {
   goBack.classList.add("go-back_button");
   goBack.innerHTML = "&#8592";
   goBack.addEventListener("click", () => {
-    closeModal();
     openEditModal();
   });
   modalNav.prepend(goBack);
@@ -253,6 +276,8 @@ function closeModal() {
   let overlay = document.querySelector(".overlay");
   if (modal) {
     modal.remove();
+  }
+  if(overlay){
     overlay.remove();
   }
 }
@@ -260,42 +285,43 @@ function closeModal() {
 function areYouSurePopUp(work) {
   let modal = document.querySelector(".edit-modal");
   modal.innerHTML = `<h3>Voulez-vous vraiment supprimer ${work.title} ?</h3>
-    <img crossorigin="anonymous" src="${work.imageUrl}" alt="${work.title}">
-    <div>
-        <button class="confirm-delete-work button">Oui</button>
-        <button class="refuse-delete-work button">Non</button>
+    <img class="expanded-image" crossorigin="anonymous" src="${work.imageUrl}" alt="${work.title}">
+    <div class="confirm-div">
+        <button class="confirm-delete-work button confirm-div-button">Oui</button>
+        <button class="refuse-delete-work button confirm-div-button">Non</button>
     </div>`;
   document
     .querySelector(".refuse-delete-work")
     .addEventListener("click", () => {
-      closeModal();
       openEditModal();
     });
   document
     .querySelector(".confirm-delete-work")
-    .addEventListener("click", () => {
+    .addEventListener("click", (e) => {
       fetch(`http://localhost:5678/api/works/${work.id}`, {
         method: "DELETE",
         headers: { Authorization: "Bearer " + token },
       })
         .then((res) => {
-          if (!res.ok) {
-            return Promise.reject(res);
-          }
-          return res.json();
+        fetchListOfWorks()
+            if (!res.status == 200 && !res.status == 204 ) {
+                alert("Une erreur est survenue "+res.status)
+            }else{
+                document.querySelector(".gallery").addEventListener("DOMNodeInserted",()=>{
+                  openEditModal() 
+                  alert("Element supprimé avec succès"); 
+                }, { once: true })
+                
+            
+            }
+        
         })
-        .then((res) => {
-          alert("Element supprimé avec succès");
-          console.log(res);
+        .then(()=>{
+            console.log(totalList)
         })
-        .catch((err) => {
-          if (err.status == 401) {
-            alert("Unauthorized");
-          } else {
-            alert("Erreur inconnue " + err.status);
-          }
-          console.error(err);
-        });
+        .then(()=>{
+            
+        })
     });
 }
 
@@ -384,29 +410,28 @@ function addNewProject() {
     headers: { Authorization: "Bearer " + token },
     body: formData,
   })
-    .then((res) => {
-      if (!res.ok) {
-        return Promise.reject(res);
-      }
-      return res.json();
-    })
-    .then((res) => {
-      alert("Ajout réussi");
-      console.log(res);
-      openEditModal();
-    })
-    .catch((err) => {
-      if (err.status == 400) {
+  .then((res) => {
+    fetchListOfWorks()
+    return res
+})
+    .then((res)=>{
+        if (res.status == 201) {
+            document.querySelector(".gallery").addEventListener("DOMNodeInserted",()=>{
+                openEditModal() 
+                alert("Un élément a été ajouté avec succès"); 
+              }, { once: true })
+    }else{
+      alert("Une erreur est survenue "+res.status)
+      if (res.status == 400) {
         alert("Bad request ");
       } else {
-        if (err.status == 401) {
+        if (res.status == 401) {
           alert("Unauthorized");
         } else {
-          alert("Erreur inconnue " + err.status);
+          alert("Erreur inconnue " + res.status);
         }
       }
-      console.error(err);
-    });
+    }})  
 }
 //Fonction qui supprime la classe active button d'un élément
 function removeActiveButtonStatus(button) {

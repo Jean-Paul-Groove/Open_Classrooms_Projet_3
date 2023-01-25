@@ -186,6 +186,14 @@ footer nav ul {
 	margin: 2em
 }
 /*Nouveau css à partir d'ici*/
+.button {
+	margin :auto;
+	width: max-content;
+	text-align: center;
+	border-radius: 60px ;
+	border: none;
+	cursor: pointer;
+}
 /*FILTRES*/
 .filtersContainer {
 	width: fit-content;
@@ -300,8 +308,8 @@ a {
 	top: 50%;
 	left: 50%;
 	translate: -50%;
-	height:50vw;
-	width: 40vw;
+	height:800px;
+	width: 700px;
 	background-color: white;
 	z-index: 2;
 	border-radius: 10px;
@@ -325,18 +333,20 @@ a {
 }
 .edit-modal h3 {
 	width: fit-content;
-	margin: auto;
+	margin: 10px auto 20px auto;
 	font-family: 'work sans';
 	font-weight: 400;
 	font-size: 26px;
 }
+/*Affichage Galerie de la modale*/
 .modal-gallery {
 	width: 80%;
+	height: 60%;
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	grid-column-gap: 10px;
 	grid-row-gap: 10px;
-	margin: 4em auto auto auto;
+	margin: 4em auto 1em auto;
 	padding-bottom: 3em;
 	border-bottom: solid 1px #B3B3B3;
 }
@@ -346,16 +356,7 @@ a {
 .modal-gallery figure {
 	position: relative;
 }
-.delete-work-button {
-	position:absolute;
-	top: 0;
-	right: 0;
-	color: white;
-	background-color: black;
-	padding: .2em;
-	margin: .2em;
-	border-radius: 10%;
-}
+
 .modal-add-picture_button{
 	font-family: 'Syne';
 	font-weight: 700;
@@ -364,36 +365,61 @@ a {
 	font-size: 14px;
 	padding: .7em 2.2em .7em 2.2em;
 }
-.button {
-	margin :auto;
-	width: max-content;
-	text-align: center;
-	border-radius: 60px ;
-	border: none;
-	cursor: pointer;
-}
+
 .modal-delete-galery{
 	color:#D65353;
 	width: fit-content;
-	margin: auto;
+	margin: 1em auto 1em auto;
 	font-family: 'Syne';
 	font-weight: 400;
 	font-size: 14px;	
 }
+.delete-work-button{
+	position:absolute;
+	top: 0;
+	right: 0;
+	color: white;
+	background-color: black;
+	padding: .2em;
+	margin: .2em;
+	border-radius: 10%;
+	cursor: pointer;
+}
+/*Affichage interface suppression projet*/
+.expanded-image{
+	height: 500px;
+	margin: 40px auto 0 auto;
+	border-radius: 1%;
+}
+
+.confirm-div{
+	display: flex;
+	margin-top: auto;
+	margin-bottom: auto;
+}
+.confirm-div-button{
+	padding:.7em 2.5em .7em 2.5em;
+	width: 25%;
+	font-weight: 700;
+	font-family: 'work sans';
+}
+.confirm-div-button:hover{
+	background-color: #1D6154;
+	color: white;
+}
 .add-file-div{
-	height: 80%;
+	height: 90%;
 	width: 70%;
-	margin-left: auto;
-	margin: auto;
+	margin: 20px auto 20px auto;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-around;
 }
 .drag-file-div {
 	display: flex;
 	flex-direction: column;
 	text-align: center;
 	background-color:#E8F1F6;
-	margin: auto;
 	border-radius: 3px;
 	width: 100%;
 	height: 30%;
@@ -460,7 +486,7 @@ a {
 	color: white;
 	font-family: 'Syne';
 	font-weight: 700;
-	margin-top: 30px;
+	margin: 0 auto 0 auto;
 	width: 60%;
 	padding: .8em 0 .8em 0;
 	pointer-events: none;

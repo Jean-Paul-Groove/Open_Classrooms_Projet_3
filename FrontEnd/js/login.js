@@ -15,21 +15,18 @@ fetch ("http://localhost:5678/api/users/login", {
         }
         return res.json()} )
     .then(res =>{
-        alert("Connexion réussie")
+        displayNotif("Connexion réussie")
         token=res
         console.log(token)
     })
     .catch((err)=>{
-        if (err.status == 404){
-            alert("Cette adresse e-mail n'est pas valide, veuillez vérifier votre addresse")
+        if (err.status == 404 || err.status == 401){
+            displayNotif(
+                `Identifiant ou mot de passe incorrect !<br> Veuillez réessayer`
+            )
         }else{
-            if (err.status == 401){
-            alert("Mot de passe erroné, veuillez réessayer")
-        }else{
-            alert("Erreur inconnue "+err.status)
-        }
-    }
-        
+            displayNotif("Erreur inconnue "+err.status)
+        }        
         console.error(err)
     })
     .then(()=>{

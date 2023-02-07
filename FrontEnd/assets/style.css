@@ -181,11 +181,15 @@ input[type="submit"]{
 }
 
 footer nav ul {
-	display: flex;
-	justify-content: flex-end;
-	margin: 2em
+	position: absolute;
+	right: 10%;
+	width: max-content;
 }
-/*Nouveau css à partir d'ici*/
+footer nav li {
+	margin: 10px;
+	font-size: 14px;
+	font-weight: 300;
+}
 .button {
 	margin :auto;
 	width: max-content;
@@ -255,7 +259,7 @@ footer nav ul {
 }
 #login-footer {
 	position: absolute;
-	bottom: -80%;
+	bottom: -150%;
 	right: 5%;
 }
 a {
@@ -292,6 +296,23 @@ a {
 	font-weight: 500;
 	font-size: 14px;
 	cursor: pointer;
+}
+/*Liens de mode édition des différents éléments*/
+.edit-element-paragraph{
+	position: absolute;
+	font-size: 15px;
+	font-weight: 300;
+}
+.edit-profile-picture {
+	top: 105%;
+	left: 60px;
+}
+.edit-introduction-description {
+	top:-20px;
+}
+.edit-portfolio-title {
+	top: 10px;
+	left: 60%;
 }
 /*OVERLAY ET MODALE*/
 .overlay{
